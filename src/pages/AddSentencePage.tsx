@@ -123,7 +123,7 @@ export function AddSentencePage({ theme, onToggleTheme }: AddSentencePageProps) 
           </div>
 
           <AudioRecorder
-            audio={audioBase64}
+            // audio={audioBase64}
             resetSignal={resetSignal} 
             onAudioCaptured={setAudioBase64}
             onReset={() => setAudioBase64('')}
