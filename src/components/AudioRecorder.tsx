@@ -1,30 +1,48 @@
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+
 
 interface AudioRecorderProps {
+  audio: string;
+  resetSignal: number; 
   onAudioCaptured: (base64: string) => void;
   onReset: () => void;
 }
 
-export function AudioRecorder({ onAudioCaptured, onReset }: AudioRecorderProps) {
+export function AudioRecorder({ audio, resetSignal, onAudioCaptured, onReset }: AudioRecorderProps) {
   const { status, audioBase64, audioUrl, error, startRecording, stopRecording, resetRecording } =
-    useAudioRecorder();
-
+  useAudioRecorder();
+  
   const handleReset = () => {
     resetRecording();
     onReset();
   };
+  const isFirstRender = useRef(true);
 
   // Propagate captured base64 upward
+useEffect(() => {
   if (audioBase64 && status === 'stopped') {
     onAudioCaptured(audioBase64);
   }
+}, [audioBase64, status]);
+
+
+useEffect(() => {
+  if (isFirstRender.current) {
+    isFirstRender.current = false;
+    return;
+  }
+
+  resetRecording();
+}, [resetSignal]);
 
   return (
     <div className="recorder">
       <div className="recorder-label">Pronunciation Recording</div>
       <div className="recorder-controls">
         {status === 'idle' && (
-          <button className="btn btn-ghost btn-sm" onClick={startRecording}>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={startRecording}>
             ⏺ Record
           </button>
         )}
@@ -33,7 +51,7 @@ export function AudioRecorder({ onAudioCaptured, onReset }: AudioRecorderProps) 
         )}
         {status === 'recording' && (
           <>
-            <button className="btn btn-danger btn-sm" onClick={stopRecording}>
+            <button type="button" className="btn btn-danger btn-sm" onClick={stopRecording}>
               ⏹ Stop
             </button>
             <span className="recorder-status">
@@ -43,7 +61,7 @@ export function AudioRecorder({ onAudioCaptured, onReset }: AudioRecorderProps) 
         )}
         {status === 'stopped' && (
           <>
-            <button className="btn btn-ghost btn-sm" onClick={handleReset}>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={handleReset}>
               ✕ Clear
             </button>
             <span className="recorder-status" style={{ color: 'var(--success)' }}>
@@ -52,7 +70,7 @@ export function AudioRecorder({ onAudioCaptured, onReset }: AudioRecorderProps) 
           </>
         )}
         {status === 'error' && (
-          <button className="btn btn-ghost btn-sm" onClick={handleReset}>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={handleReset}>
             ↺ Retry
           </button>
         )}

@@ -35,7 +35,7 @@ export function SentencePage({ theme, onToggleTheme }: SentencePageProps) {
     { label: language?.name ?? '…', path: `/languages/${languageId}` },
     { label: chapter?.title ?? '…', path: `/languages/${languageId}/chapters/${chapterId}` },
     { label: lesson?.title ?? '…', path: `/languages/${languageId}/chapters/${chapterId}/lessons/${lessonId}` },
-    { label: sentence?.englishSentence.slice(0, 20) + (sentence && sentence.englishSentence.length > 20 ? '…' : '') ?? '…', path: '#' },
+    { label: sentence ? sentence.englishSentence.slice(0, 20) + (sentence.englishSentence.length > 20 ? '…' : '') : '…', path: '#'},
   ];
 
   useEffect(() => {

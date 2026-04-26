@@ -17,11 +17,12 @@ export function AddSentencePage({ theme, onToggleTheme }: AddSentencePageProps) 
   const navigate = useNavigate();
   const [language, setLanguage] = useState<Language | null>(null);
   const [chapter, setChapter] = useState<Chapter | null>(null);
+  const [resetSignal, setResetSignal] = useState(0);
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [successCount, setSuccessCount] = useState(0);
   const [audioBase64, setAudioBase64] = useState('');
-  const [recorderKey, setRecorderKey] = useState(0);
+  // const [recorderKey, setRecorderKey] = useState(0);
   const [form, setForm] = useState({ englishSentence: '', translatedSentence: '' });
   const englishRef = useRef<HTMLInputElement>(null);
 
@@ -47,7 +48,7 @@ export function AddSentencePage({ theme, onToggleTheme }: AddSentencePageProps) 
   const resetForm = () => {
     setForm({ englishSentence: '', translatedSentence: '' });
     setAudioBase64('');
-    setRecorderKey(k => k + 1); // Force AudioRecorder remount to reset
+    // setRecorderKey(k => k + 1); // Force AudioRecorder remount to reset
     setTimeout(() => englishRef.current?.focus(), 50);
   };
 
@@ -62,8 +63,13 @@ export function AddSentencePage({ theme, onToggleTheme }: AddSentencePageProps) 
         translatedSentence: form.translatedSentence,
         audioData: audioBase64,
       });
+
       setSuccessCount(c => c + 1);
-      resetForm();
+
+      setSuccessCount(c => c + 1);
+
+      setResetSignal(s => s + 1);
+      resetForm(); 
     } finally {
       setSubmitting(false);
     }
@@ -117,7 +123,8 @@ export function AddSentencePage({ theme, onToggleTheme }: AddSentencePageProps) 
           </div>
 
           <AudioRecorder
-            key={recorderKey}
+            audio={audioBase64}
+            resetSignal={resetSignal} 
             onAudioCaptured={setAudioBase64}
             onReset={() => setAudioBase64('')}
           />
