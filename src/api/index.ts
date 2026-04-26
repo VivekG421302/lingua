@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Language, Chapter, Lesson, Sentence } from '../types';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://lingua-db.onrender.com';
 
 const api = axios.create({ baseURL: BASE_URL });
 
