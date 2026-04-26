@@ -4,13 +4,12 @@ import { useRef } from 'react';
 
 
 interface AudioRecorderProps {
-  audio: string;
   resetSignal: number; 
   onAudioCaptured: (base64: string) => void;
   onReset: () => void;
 }
 
-export function AudioRecorder({ audio, resetSignal, onAudioCaptured, onReset }: AudioRecorderProps) {
+export function AudioRecorder({ resetSignal, onAudioCaptured, onReset }: AudioRecorderProps) {
   const { status, audioBase64, audioUrl, error, startRecording, stopRecording, resetRecording } =
   useAudioRecorder();
   
